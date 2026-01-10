@@ -6,6 +6,8 @@ import router from './router'
 import PrimeVue from 'primevue/config'
 import { definePreset } from '@primeuix/themes'
 import Aura from '@primeuix/themes/aura'
+import NbPaymentsComponents from '@vlalg-nimbus/nb-payments'
+import '@vlalg-nimbus/nb-payments/dist/style.css'
 
 const customPreset = definePreset(Aura, {
   semantic: {
@@ -34,7 +36,7 @@ app.use(PrimeVue, {
     },
   },
 })
-
+app.use(NbPaymentsComponents)
 app.use(router)
 
 app.mount('#app')
