@@ -11,7 +11,7 @@ const emit = defineEmits(['viewDetailCard'])
       <img
         class="card-img-product"
         src="https://hips.hearstapps.com/hmg-prod/images/camisa-blanca-01-67d2ba0eb95ce.jpg"
-        alt=""
+        alt="image_product"
       />
     </div>
     <div class="card-information">
