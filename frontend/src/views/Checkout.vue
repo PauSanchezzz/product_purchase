@@ -3,16 +3,20 @@ import Stepper from 'primevue/stepper'
 import StepItem from 'primevue/stepitem'
 import Step from 'primevue/step'
 import StepPanel from 'primevue/steppanel'
-import Button from 'primevue/button'
 import ApproveTerms from '@/components/checkout/approveTerms.vue'
 import PaymentInformation from '@/components/checkout/paymentInformation.vue'
 import ShippingDetails from '@/components/checkout/shippingDetails.vue'
 import SummaryCard from '@/components/summaryCard.vue'
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+
+const store = useStore()
+const purchase = computed(() => store.state.purchase)
 </script>
 
 <template>
-  <div class="full-page">
-    <div class="w-full">
+  <div class="full-page max-md:flex-col md:px-[3rem] md:pt-[120px]">
+    <div class="w-full max-md:pr-[1rem] max-md:order-2">
       <div class="card">
         <Stepper value="1" linear>
           <StepItem value="1">
@@ -42,7 +46,7 @@ import SummaryCard from '@/components/summaryCard.vue'
         </Stepper>
       </div>
     </div>
-    <div class="w-full">
+    <div class="w-full max-md:px-[1rem] max-md:pb-[1rem] max-md:order-1">
       <SummaryCard />
     </div>
   </div>
@@ -55,7 +59,5 @@ import SummaryCard from '@/components/summaryCard.vue'
   width: 100%;
   max-width: 1500px;
   margin: 0 auto;
-  padding-left: 3rem;
-  padding-right: 3rem;
 }
 </style>

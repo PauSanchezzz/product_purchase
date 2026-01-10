@@ -6,7 +6,9 @@ import IconField from 'primevue/iconfield'
 import InputIcon from 'primevue/inputicon'
 import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
+import { useStore } from 'vuex'
 
+const store = useStore()
 const emit = defineEmits(['nextStep', 'prevStep'])
 
 const { handleSubmit, errors, meta } = useForm({
@@ -38,9 +40,21 @@ const { value: postalCode } = useField<string>('postalCode')
 const { value: phoneNumber } = useField<string>('phoneNumber')
 
 const onSubmit = handleSubmit(async (values, $event: any) => {
-  console.log(values)
   emit('nextStep', '3')
 })
+
+const addInformation = () => {
+  store.commit('setPurchase', {
+    ...store.state.purchase,
+    shipping: {
+      firstName: firstName.value,
+      lastName: lastName.value,
+      address: address.value,
+      postalCode: postalCode.value,
+      phoneNumber: phoneNumber.value,
+    },
+  })
+}
 </script>
 
 <template>
@@ -49,7 +63,13 @@ const onSubmit = handleSubmit(async (values, $event: any) => {
       <label class="labels" for="firstName">Nombre:</label>
       <IconField>
         <InputIcon class="pi pi-user" />
-        <InputText v-model="firstName" class="w-full" id="firstName" placeholder="Nombre" />
+        <InputText
+          v-model="firstName"
+          class="w-full"
+          id="firstName"
+          placeholder="Nombre"
+          @input="addInformation"
+        />
       </IconField>
       <ErrorMessage class="error-message" name="firstName" />
     </div>
@@ -58,7 +78,13 @@ const onSubmit = handleSubmit(async (values, $event: any) => {
       <label class="labels" for="lastName">Apellido:</label>
       <IconField>
         <InputIcon class="pi pi-user" />
-        <InputText v-model="lastName" class="w-full" id="lastName" placeholder="Apellido" />
+        <InputText
+          v-model="lastName"
+          class="w-full"
+          id="lastName"
+          placeholder="Apellido"
+          @input="addInformation"
+        />
       </IconField>
       <ErrorMessage class="error-message" name="lastName" />
     </div>
@@ -67,7 +93,13 @@ const onSubmit = handleSubmit(async (values, $event: any) => {
       <label class="labels" for="address">Dirección:</label>
       <IconField>
         <InputIcon class="pi pi-map-marker" />
-        <InputText v-model="address" class="w-full" id="address" placeholder="Dirección completo" />
+        <InputText
+          v-model="address"
+          class="w-full"
+          id="address"
+          placeholder="Dirección completo"
+          @input="addInformation"
+        />
       </IconField>
       <ErrorMessage class="error-message" name="address" />
     </div>
@@ -77,10 +109,13 @@ const onSubmit = handleSubmit(async (values, $event: any) => {
       <IconField>
         <InputIcon class="pi pi-map" />
         <InputText
+          v-keyfilter.int
           v-model="postalCode"
           class="w-full"
           id="postalCode"
           placeholder="Código postal"
+          @input="addInformation"
+          maxlength="8"
         />
       </IconField>
       <ErrorMessage class="error-message" name="postalCode" />
@@ -91,10 +126,13 @@ const onSubmit = handleSubmit(async (values, $event: any) => {
       <IconField>
         <InputIcon class="pi pi-phone" />
         <InputText
+          v-keyfilter.int
           v-model="phoneNumber"
           class="w-full"
           id="phoneNumber"
           placeholder="Número de teléfono"
+          @input="addInformation"
+          maxlength="10"
         />
       </IconField>
       <ErrorMessage class="error-message" name="phoneNumber" />

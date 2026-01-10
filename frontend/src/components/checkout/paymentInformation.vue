@@ -4,7 +4,9 @@ import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 import Button from 'primevue/button'
 import { ref } from 'vue'
+import { useStore } from 'vuex'
 
+const store = useStore()
 const emit = defineEmits(['nextStep', 'prevStep'])
 
 export interface getCardValues {
@@ -31,6 +33,15 @@ const currentYear = new Date().getFullYear()
 const years = ref(Array.from({ length: 15 }, (_, i) => currentYear + i))
 
 const setCardValues = (values: getCardValues) => {
+  store.commit('setPurchase', {
+    ...store.state.purchase,
+    payment: {
+      cardNumber: values.number,
+      cardHolder: values.name,
+      cardExpiration: values.expMonth + '/' + values.expYear,
+      cardCvv: values.ccv,
+    },
+  })
   setFieldValue('number', values.number)
   setFieldValue('name', values.name)
   setFieldValue('expMonth', values.expMonth)
@@ -44,7 +55,6 @@ const sendForm = () => {
 }
 
 const onSubmit = handleSubmit(async (values, $event: any) => {
-  console.log(values)
   emit('nextStep')
 })
 </script>

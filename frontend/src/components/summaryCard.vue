@@ -1,5 +1,22 @@
 <script setup lang="ts">
+import router from '@/router'
 import { formatPrice, truncateWords } from '@/utils/mixins'
+import { computed, nextTick, onMounted } from 'vue'
+import { useStore } from 'vuex'
+
+const store = useStore()
+
+/* Store */
+const productSelected = computed(() => store.state.product)
+const totalPrice = computed(() => store.getters.totalPrice)
+
+onMounted(() => {
+  nextTick(async () => {
+    if (productSelected.value.quantity === 0) {
+      router.push('/')
+    }
+  })
+})
 </script>
 
 <template>
@@ -13,7 +30,7 @@ import { formatPrice, truncateWords } from '@/utils/mixins'
         />
       </div>
       <div>
-        <p class="text-m--bold">Camisa de manga corta</p>
+        <p class="text-m--bold">{{ productSelected.name }}</p>
         <p class="text-s--gray">
           {{
             truncateWords(
@@ -22,14 +39,16 @@ import { formatPrice, truncateWords } from '@/utils/mixins'
             )
           }}
         </p>
-        <p class="text-m--semibold">{{ `${formatPrice(1000)} x 10` }}</p>
+        <p class="text-m--semibold">
+          {{ `${formatPrice(productSelected.price)} x ${productSelected.quantity}` }}
+        </p>
       </div>
     </div>
     <hr />
     <div class="detail-summary">
       <div>
         <p class="text-m--bold">Subtotal</p>
-        <p class="text-m--semibold">{{ formatPrice(10000) }}</p>
+        <p class="text-m--semibold">{{ formatPrice(totalPrice) }}</p>
       </div>
       <div>
         <p class="text-m--bold">Envío</p>
@@ -38,7 +57,7 @@ import { formatPrice, truncateWords } from '@/utils/mixins'
       <hr />
       <div>
         <p class="text-m--bold">Total</p>
-        <p class="text-m--semibold">{{ formatPrice(10000) }}</p>
+        <p class="text-m--semibold">{{ formatPrice(totalPrice + 10000) }}</p>
       </div>
     </div>
   </div>

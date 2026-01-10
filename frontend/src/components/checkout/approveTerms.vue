@@ -5,7 +5,9 @@ import * as z from 'zod'
 import Checkbox from 'primevue/checkbox'
 import { nextTick, onMounted } from 'vue'
 import Button from 'primevue/button'
+import { useStore } from 'vuex'
 
+const store = useStore()
 const emit = defineEmits(['nextStep'])
 
 const { handleSubmit, errors, meta } = useForm({
@@ -29,27 +31,32 @@ const { value: terms } = useField<boolean>('terms')
 const { value: secondTerms } = useField<boolean>('secondTerms')
 
 const onSubmit = handleSubmit(async (values, $event: any) => {
-  console.log(values)
   emit('nextStep', '2')
 })
 
-onMounted(() => {
-  nextTick(async () => {})
-})
+const onTermsChange = () => {
+  store.commit('setPurchase', {
+    ...store.state.purchase,
+    terms: {
+      term1: terms.value,
+      term2: secondTerms.value,
+    },
+  })
+}
 </script>
 
 <template>
   <div class="flex flex-col gap-3">
     <div>
       <div class="flex items-center gap-3">
-        <Checkbox v-model="terms" binary inputId="terms" />
+        <Checkbox v-model="terms" binary inputId="terms" @change="onTermsChange" />
         <label for="terms"> Terminos y condiciones </label>
       </div>
       <ErrorMessage class="error-message" name="terms" />
     </div>
     <div>
       <div class="flex items-center gap-3">
-        <Checkbox v-model="secondTerms" binary inputId="secondTerms" />
+        <Checkbox v-model="secondTerms" binary inputId="secondTerms" @change="onTermsChange" />
         <label for="secondTerms"> Terminos y condiciones </label>
       </div>
       <ErrorMessage class="error-message" name="secondTerms" />

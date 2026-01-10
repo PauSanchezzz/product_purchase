@@ -6,4 +6,7 @@
       font-weight: bold;
     }
   }
+  .p-dialog-footer {
+    padding: 1rem;
+  }
 }

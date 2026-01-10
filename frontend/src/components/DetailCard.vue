@@ -1,14 +1,48 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import { useStore } from 'vuex'
 import Dialog from 'primevue/dialog'
 import { formatPrice } from '@/utils/mixins'
 import InputNumber from 'primevue/inputnumber'
 import Button from 'primevue/button'
+import { useRouter } from 'vue-router'
+import { useToast } from 'primevue/usetoast'
+import { computed } from 'vue'
 
+const toast = useToast()
+const router = useRouter()
+const store = useStore()
 const emit = defineEmits(['closeModal', 'onSubmit'])
 
 const dialog = ref(true)
-const quantity = ref(10)
+const quantity = ref(0)
+
+/* Store */
+const productSelected = computed(() => store.state.product)
+const totalPrice = computed(() => store.getters.totalPrice)
+
+const goToPayment = () => {
+  if (quantity.value === 0) {
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Debes seleccionar al menos un producto',
+      life: 2000,
+    })
+    return
+  }
+
+  router.push('/checkout')
+}
+
+const changeQuantity = () => {
+  /* TODO */
+  store.commit('setProduct', {
+    name: 'Camisa de manga corta - store',
+    price: 1000,
+    quantity: quantity.value,
+  })
+}
 
 watch(
   () => dialog.value,
@@ -34,7 +68,7 @@ watch(
           <img
             class="img-product"
             src="https://hips.hearstapps.com/hmg-prod/images/camisa-blanca-01-67d2ba0eb95ce.jpg"
-            alt=""
+            alt="image product"
           />
         </div>
         <div class="w-full flex flex-col gap-3 p-4">
@@ -48,7 +82,7 @@ watch(
             quod.
           </p>
           <p class="text-l--bold">{{ formatPrice(1000) }} c/u</p>
-          <div class="flex items-center justify-between gap-2">
+          <div class="flex items-center justify-between gap-2 flex-wrap">
             <div class="w-40">
               <InputNumber
                 v-model="quantity"
@@ -60,6 +94,7 @@ watch(
                 fluid
                 :step="1"
                 :min="0"
+                @input="changeQuantity"
               >
                 <template #incrementbuttonicon>
                   <span class="pi pi-plus" />
@@ -76,12 +111,13 @@ watch(
     </template>
     <template #footer>
       <div class="flex flex-wrap items-center justify-between w-full">
-        <p class="text-l--bold">Total: {{ formatPrice(3000) }}</p>
+        <p class="text-l--bold">Total: {{ formatPrice(totalPrice) }}</p>
         <Button
           label="¡Pagar ahora!"
           class="general-button payment"
           icon="pi pi-shopping-cart"
           iconPos="right"
+          @click="goToPayment"
         />
       </div>
     </template>
