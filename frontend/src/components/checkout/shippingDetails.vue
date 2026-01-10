@@ -102,7 +102,7 @@ const onSubmit = handleSubmit(async (values, $event: any) => {
 
     <div class="flex py-6 gap-2">
       <Button label="Anterior" severity="secondary" @click="emit('prevStep')" />
-      <Button label="Siguiente" class="general-button" @click="sendForm" />
+      <Button label="Siguiente" class="general-button" @click="onSubmit" />
     </div>
   </div>
 </template>
