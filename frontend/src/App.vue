@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { RouterLink, RouterView } from 'vue-router'
 import Header from './components/Header.vue'
 import Card from './components/Card.vue'
 import DetailCard from './components/DetailCard.vue'
