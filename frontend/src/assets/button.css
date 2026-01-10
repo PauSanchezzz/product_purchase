@@ -1,0 +1,6 @@
+.general-button.p-button.p-component {
+  padding: 4px 1rem;
+  &.payment {
+    padding: 8px 3rem;
+  }
+}
