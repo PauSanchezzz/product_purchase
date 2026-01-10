@@ -1,9 +1,15 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useStore } from 'vuex'
 import Card from '@/components/Card.vue'
 import DetailCard from '@/components/DetailCard.vue'
 
+const store = useStore()
 const viewDetailCard = ref(false)
+
+onMounted(() => {
+  store.dispatch('clearStore')
+})
 </script>
 
 <template>

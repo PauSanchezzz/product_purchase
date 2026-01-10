@@ -10,7 +10,7 @@ import { useStore } from 'vuex'
 const store = useStore()
 const emit = defineEmits(['nextStep'])
 
-const { handleSubmit, errors, meta } = useForm({
+const { handleSubmit, errors, meta, resetForm } = useForm({
   validationSchema: toTypedSchema(
     z.object({
       terms: z
@@ -43,6 +43,21 @@ const onTermsChange = () => {
     },
   })
 }
+
+const setInformation = () => {
+  resetForm({
+    values: {
+      terms: store.state.purchase.terms.term1,
+      secondTerms: store.state.purchase.terms.term2,
+    },
+  })
+}
+
+onMounted(() => {
+  nextTick(() => {
+    setInformation()
+  })
+})
 </script>
 
 <template>

@@ -1,33 +1,40 @@
 import { createStore } from 'vuex'
 
-export default createStore({
-  state: {
-    product: {
-      name: '',
-      price: 0,
-      quantity: 0,
+const STORAGE_KEY = 'purchase_store'
+
+const initialState = {
+  product: {
+    name: '',
+    price: 0,
+    quantity: 0,
+  },
+  purchase: {
+    terms: {
+      term1: false,
+      term2: false,
     },
-    purchase: {
-      terms: {
-        term1: false,
-        term2: false,
-      },
-      shipping: {
-        name: '',
-        address: '',
-        city: '',
-        state: '',
-        zipCode: '',
-        country: '',
-      },
-      payment: {
-        cardNumber: '',
-        cardHolder: '',
-        cardExpiration: '',
-        cardCvv: '',
-      },
+    shipping: {
+      name: '',
+      address: '',
+      city: '',
+      state: '',
+      zipCode: '',
+      country: '',
+    },
+    payment: {
+      cardNumber: '',
+      cardHolder: '',
+      cardExpiration: '',
+      cardCvv: '',
     },
   },
+}
+
+const persistedState = localStorage.getItem(STORAGE_KEY)
+const state = persistedState ? JSON.parse(persistedState) : initialState
+
+export default createStore({
+  state,
   getters: {
     product: (state: any) => state.product,
     totalPrice: (state: any) => state.product.price * state.product.quantity,
@@ -38,20 +45,29 @@ export default createStore({
       state.product = product
     },
     resetPurchase(state: any) {
-      state.product = {
-        name: '',
-        price: 0,
-        quantity: 0,
-      }
+      Object.assign(state, JSON.parse(JSON.stringify(initialState)))
     },
     setPurchase(state: any, purchase: any) {
       state.purchase = purchase
+    },
+    clearStore(state: any) {
+      Object.assign(state, JSON.parse(JSON.stringify(initialState)))
     },
   },
   actions: {
     resetPurchase({ commit }: any) {
       commit('resetPurchase')
     },
+    clearStore({ commit }: any) {
+      commit('clearStore')
+      localStorage.removeItem(STORAGE_KEY)
+    },
   },
-  modules: {},
+  plugins: [
+    (store) => {
+      store.subscribe((mutation, state) => {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
+      })
+    },
+  ],
 })

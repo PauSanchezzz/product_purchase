@@ -7,11 +7,12 @@ import InputIcon from 'primevue/inputicon'
 import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
 import { useStore } from 'vuex'
+import { nextTick, onMounted } from 'vue'
 
 const store = useStore()
 const emit = defineEmits(['nextStep', 'prevStep'])
 
-const { handleSubmit, errors, meta } = useForm({
+const { handleSubmit, errors, meta, resetForm } = useForm({
   validationSchema: toTypedSchema(
     z.object({
       firstName: z
@@ -43,6 +44,18 @@ const onSubmit = handleSubmit(async (values, $event: any) => {
   emit('nextStep', '3')
 })
 
+const setInformation = () => {
+  resetForm({
+    values: {
+      firstName: store.state.purchase.shipping.firstName,
+      lastName: store.state.purchase.shipping.lastName,
+      address: store.state.purchase.shipping.address,
+      postalCode: store.state.purchase.shipping.postalCode,
+      phoneNumber: store.state.purchase.shipping.phoneNumber,
+    },
+  })
+}
+
 const addInformation = () => {
   store.commit('setPurchase', {
     ...store.state.purchase,
@@ -55,6 +68,12 @@ const addInformation = () => {
     },
   })
 }
+
+onMounted(() => {
+  nextTick(() => {
+    setInformation()
+  })
+})
 </script>
 
 <template>
