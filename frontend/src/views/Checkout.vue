@@ -15,7 +15,7 @@ const purchase = computed(() => store.state.purchase)
 </script>
 
 <template>
-  <div class="full-page max-md:flex-col md:px-[3rem] md:pt-[120px]">
+  <div class="full-page max-md:flex-col md:px-[3rem] md:pt-[120px] pb-6">
     <div class="w-full max-md:pr-[1rem] max-md:order-2">
       <div class="card">
         <Stepper value="1" linear>

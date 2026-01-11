@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import router from '@/router'
 import { formatDate } from '@/utils/mixins'
 import 'primeicons/primeicons.css'
 </script>
 
 <template>
   <header>
-    <div>
+    <div @click="router.push('/')">
       <p class="text-m--gray">{{ formatDate(new Date().toString()) }}</p>
       <p class="text-l--bold">¡Bienvenido a Tú Tienda!</p>
     </div>
