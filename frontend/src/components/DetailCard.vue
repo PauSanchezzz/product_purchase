@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { useStore } from 'vuex'
 import Dialog from 'primevue/dialog'
 import { formatPrice } from '@/utils/mixins'
@@ -7,7 +7,7 @@ import InputNumber from 'primevue/inputnumber'
 import Button from 'primevue/button'
 import { useRouter } from 'vue-router'
 import { useToast } from 'primevue/usetoast'
-import { computed } from 'vue'
+import Loading from './Loading.vue'
 
 const toast = useToast()
 const router = useRouter()
@@ -18,8 +18,9 @@ const dialog = ref(true)
 const quantity = ref(0)
 
 /* Store */
-const productSelected = computed(() => store.state.product)
-const totalPrice = computed(() => store.getters.totalPrice)
+const product = computed(() => store.getters['products/selectedProduct'])
+const isLoading = computed(() => store.getters['products/isLoading'])
+const totalPrice = computed(() => (product.value ? product.value.price * quantity.value : 0))
 
 const goToPayment = () => {
   if (quantity.value === 0) {
@@ -31,15 +32,16 @@ const goToPayment = () => {
     })
     return
   }
-
   router.push('/checkout')
 }
 
 const changeQuantity = () => {
-  /* TODO */
   store.commit('setProduct', {
-    name: 'Camisa de manga corta - store',
-    price: 1000,
+    description: product.value.description,
+    id: product.value.id,
+    image: product.value.image,
+    name: product.value.name,
+    price: product.value.price,
     quantity: quantity.value,
   })
 }
@@ -63,25 +65,17 @@ watch(
       <i class="pi pi-times" style="font-size: 1.5rem" @click="emit('closeModal')"></i>
     </template>
     <template #default>
-      <div class="flex max-md:flex-col items-center w-full gap-6">
+      <Loading v-if="isLoading" />
+      <div v-else-if="product" class="flex max-md:flex-col items-center w-full gap-6">
         <div class="w-[400px] max-md:w-[200px]">
-          <img
-            class="img-product"
-            src="https://hips.hearstapps.com/hmg-prod/images/camisa-blanca-01-67d2ba0eb95ce.jpg"
-            alt="image product"
-          />
+          <img class="img-product" :src="product.image" alt="image product" />
         </div>
         <div class="w-full flex flex-col gap-3 p-4">
-          <p class="heading-1">Camisa de manga corta</p>
+          <p class="heading-1">{{ product.name }}</p>
           <p class="text-m--gray">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum
-            dolor sit amet consectetur adipisicing elit. Quisquam, quod.Lorem ipsum dolor sit amet
-            consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit amet consectetur
-            adipisicing elit. Quisquam, quod.Lorem ipsum dolor sit amet consectetur adipisicing
-            elit. Quisquam, quod. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam,
-            quod.
+            {{ product.description }}
           </p>
-          <p class="text-l--bold">{{ formatPrice(1000) }} c/u</p>
+          <p class="text-l--bold">{{ formatPrice(product.price) }} c/u</p>
           <div class="flex items-center justify-between gap-2 flex-wrap">
             <div class="w-40">
               <InputNumber
@@ -94,6 +88,7 @@ watch(
                 fluid
                 :step="1"
                 :min="0"
+                :max="product.stock"
                 @input="changeQuantity"
               >
                 <template #incrementbuttonicon>
@@ -104,10 +99,11 @@ watch(
                 </template>
               </InputNumber>
             </div>
-            <p class="text-m--gray">Stock: 10</p>
+            <p class="text-m--gray">Stock: {{ product.stock }}</p>
           </div>
         </div>
       </div>
+      <div v-else class="text-center p-8">No fue posible cargar la información del producto.</div>
     </template>
     <template #footer>
       <div class="flex flex-wrap items-center justify-between w-full">
@@ -117,6 +113,7 @@ watch(
           class="general-button payment"
           icon="pi pi-shopping-cart"
           iconPos="right"
+          :disabled="!product || quantity <= 0"
           @click="goToPayment"
         />
       </div>

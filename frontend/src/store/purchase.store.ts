@@ -1,11 +1,15 @@
 import { createStore } from 'vuex'
+import productsModule from './products.store'
 
 const STORAGE_KEY = 'purchase_store'
 
-const initialState = {
+export const initialState = {
   product: {
     name: '',
     price: 0,
+    id: 0,
+    image: '',
+    description: '',
     quantity: 0,
   },
   purchase: {
@@ -30,44 +34,55 @@ const initialState = {
   },
 }
 
-const persistedState = localStorage.getItem(STORAGE_KEY)
-const state = persistedState ? JSON.parse(persistedState) : initialState
+export const createPurchaseStore = (preloadedState?: any) => {
+  const state = preloadedState || JSON.parse(JSON.stringify(initialState))
 
-export default createStore({
-  state,
-  getters: {
-    product: (state: any) => state.product,
-    totalPrice: (state: any) => state.product.price * state.product.quantity,
-    purchase: (state: any) => state.purchase,
-  },
-  mutations: {
-    setProduct(state: any, product: any) {
-      state.product = product
+  return createStore({
+    state,
+    modules: {
+      products: productsModule,
     },
-    resetPurchase(state: any) {
-      Object.assign(state, JSON.parse(JSON.stringify(initialState)))
+    getters: {
+      product: (state: any) => state.product,
+      totalPrice: (state: any) => state.product.price * state.product.quantity,
+      purchase: (state: any) => state.purchase,
     },
-    setPurchase(state: any, purchase: any) {
-      state.purchase = purchase
+    mutations: {
+      setProduct(state: any, product: any) {
+        state.product = product
+      },
+      resetPurchase(state: any) {
+        state.product = { ...initialState.product }
+        state.purchase = JSON.parse(JSON.stringify(initialState.purchase))
+      },
+      setPurchase(state: any, purchase: any) {
+        state.purchase = purchase
+      },
+      clearStore(state: any) {
+        state.product = { ...initialState.product }
+        state.purchase = JSON.parse(JSON.stringify(initialState.purchase))
+      },
     },
-    clearStore(state: any) {
-      Object.assign(state, JSON.parse(JSON.stringify(initialState)))
+    actions: {
+      resetPurchase({ commit }: any) {
+        commit('resetPurchase')
+      },
+      clearStore({ commit }: any) {
+        commit('clearStore')
+        localStorage.removeItem(STORAGE_KEY)
+      },
     },
-  },
-  actions: {
-    resetPurchase({ commit }: any) {
-      commit('resetPurchase')
-    },
-    clearStore({ commit }: any) {
-      commit('clearStore')
-      localStorage.removeItem(STORAGE_KEY)
-    },
-  },
-  plugins: [
-    (store) => {
-      store.subscribe((mutation, state) => {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
-      })
-    },
-  ],
-})
+    plugins: [
+      (store) => {
+        store.subscribe((mutation, state) => {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state))
+        })
+      },
+    ],
+  })
+}
+
+const persistedState = localStorage.getItem(STORAGE_KEY)
+const preloadedState = persistedState ? JSON.parse(persistedState) : undefined
+
+export default createPurchaseStore(preloadedState)

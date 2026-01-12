@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { truncateWords, formatPrice } from '@/utils/mixins'
 import Button from 'primevue/button'
+import type { Product } from '@/interfaces/products.interface'
+
+const props = defineProps<{
+  product: Product
+}>()
 
 const emit = defineEmits(['viewDetailCard'])
 </script>
@@ -8,30 +13,21 @@ const emit = defineEmits(['viewDetailCard'])
 <template>
   <div class="card">
     <div class="card-img-container">
-      <img
-        class="card-img-product"
-        src="https://hips.hearstapps.com/hmg-prod/images/camisa-blanca-01-67d2ba0eb95ce.jpg"
-        alt="image_product"
-      />
+      <img class="card-img-product" :src="props.product.image" alt="image_product" />
     </div>
     <div class="card-information">
-      <p class="text-m--bold pt-2">Camisa de manga corta</p>
+      <p class="text-m--bold pt-2">{{ props.product.name }}</p>
       <p class="text-s--gray">
-        {{
-          truncateWords(
-            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.',
-            16,
-          )
-        }}
+        {{ truncateWords(props.product.description, 16) }}
       </p>
-      <p class="text-m--bold">{{ formatPrice(1000) }} c/u</p>
+      <p class="text-m--bold">{{ formatPrice(props.product.price) }} c/u</p>
       <div class="pt-2">
         <Button
           label="Ver más"
           class="general-button"
           icon="pi pi-sparkles"
           iconPos="right"
-          @click="emit('viewDetailCard')"
+          @click="emit('viewDetailCard', props.product)"
         />
       </div>
     </div>

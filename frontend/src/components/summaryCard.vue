@@ -24,20 +24,12 @@ onMounted(() => {
     <p class="text-l pb-4">Resumen de la compra</p>
     <div class="detail-product">
       <div class="image-container">
-        <img
-          src="https://hips.hearstapps.com/hmg-prod/images/camisa-blanca-01-67d2ba0eb95ce.jpg"
-          alt="product-image"
-        />
+        <img :src="productSelected.image" alt="product-image" />
       </div>
       <div>
         <p class="text-m--bold">{{ productSelected.name }}</p>
         <p class="text-s--gray">
-          {{
-            truncateWords(
-              'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.',
-              12,
-            )
-          }}
+          {{ truncateWords(productSelected.description, 12) }}
         </p>
         <p class="text-m--semibold">
           {{ `${formatPrice(productSelected.price)} x ${productSelected.quantity}` }}
