@@ -1,10 +1,16 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { PrefirmedTokensModule } from './modules/prefirmed-tokens.module';
+import { ConfigModule } from '@nestjs/config';
+import { typeOrmConfig } from './config/appDataSource';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    /* TypeOrmModule.forRoot(typeOrmConfig), */
+    PrefirmedTokensModule,
+  ],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
