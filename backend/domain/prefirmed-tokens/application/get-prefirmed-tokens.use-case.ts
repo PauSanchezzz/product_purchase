@@ -6,8 +6,7 @@ export class GetPrefirmedTokensUseCase {
     
     async execute(): Promise<PrefirmedTokenModel[]> {
         try {
-            const prefirmedTokens = await this.repository.getPrefirmedToken()
-            return prefirmedTokens
+            return await this.repository.getPrefirmedToken()
         } catch (error) {
             throw error
         }
