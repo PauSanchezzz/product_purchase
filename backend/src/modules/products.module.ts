@@ -5,6 +5,8 @@ import { GetProductsHandler } from 'src/adapter/input/handlers/get-products.hand
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductEntity } from 'src/adapter/output/postgres/entities/product.entity';
 import { ProductsPostgresRepository } from 'src/adapter/output/postgres/repository/products.postgres.repository';
+import { GetProductUseCase } from 'domain/products/application/get-product.use-case';
+import { GetProductHandler } from 'src/adapter/input/handlers/get-product.handler';
 
 @Module({
   imports: [TypeOrmModule.forFeature([ProductEntity])],
@@ -20,6 +22,20 @@ import { ProductsPostgresRepository } from 'src/adapter/output/postgres/reposito
             return new GetProductsUseCase(ProductsPostgresRepository)
         },
         inject: [ProductsPostgresRepository],
+    },
+    {
+        provide: GetProductUseCase,
+        useFactory: (ProductsPostgresRepository: ProductsPostgresRepository) => {
+            return new GetProductUseCase(ProductsPostgresRepository)
+        },
+        inject: [ProductsPostgresRepository],
+    },
+    {
+        provide: GetProductHandler,
+        useFactory: (GetProductUseCase: GetProductUseCase) => {
+            return new GetProductHandler(GetProductUseCase)
+        },
+        inject: [GetProductUseCase],
     },
     {
         provide: GetProductsHandler,
