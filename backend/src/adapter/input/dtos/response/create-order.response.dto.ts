@@ -1,3 +1,5 @@
+import { TypePrefirmedTokensResponseDto } from "./get-prefirmed-tokens.response.dto";
+
 export class CreateOrderResponseDto {
     id: string;
     productId: number;
@@ -6,4 +8,5 @@ export class CreateOrderResponseDto {
     subtotal: number;
     total: number;
     createdAt: Date;
+    prefirmedToken: TypePrefirmedTokensResponseDto;
 }

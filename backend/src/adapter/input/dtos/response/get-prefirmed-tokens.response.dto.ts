@@ -2,5 +2,5 @@ import { PrefirmedTokenModel } from "domain/prefirmed-tokens/model/prefirmed-tok
 
 export interface TypePrefirmedTokensResponseDto { 
     personalDataAuth: PrefirmedTokenModel, 
-    acceptanceToken: PrefirmedTokenModel
+    endUserPolicy: PrefirmedTokenModel
 }

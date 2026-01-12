@@ -7,11 +7,14 @@ import { CreateOrderHandler } from 'src/adapter/input/handlers/create-order.hand
 import { OrderController } from 'src/adapter/input/controllers/order.controller';
 import { ProductsModule } from './products.module';
 import { ProductsPostgresRepository } from 'src/adapter/output/postgres/repository/products.postgres.repository';
+import { GetPrefirmedTokensUseCase } from 'domain/prefirmed-tokens/application/get-prefirmed-tokens.use-case';
+import { PrefirmedTokensModule } from './prefirmed-tokens.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([OrderEntity]),
     ProductsModule,
+    PrefirmedTokensModule
   ],
   controllers: [OrderController],
   providers: [
@@ -31,10 +34,10 @@ import { ProductsPostgresRepository } from 'src/adapter/output/postgres/reposito
     },
     {
       provide: CreateOrderHandler,
-      useFactory: (createOrderUseCase: CreateOrderUseCase) => {
-        return new CreateOrderHandler(createOrderUseCase);
+      useFactory: (createOrderUseCase: CreateOrderUseCase, getPrefirmedTokensUseCase: GetPrefirmedTokensUseCase) => {
+        return new CreateOrderHandler(createOrderUseCase, getPrefirmedTokensUseCase);
       },
-      inject: [CreateOrderUseCase],
+      inject: [CreateOrderUseCase, GetPrefirmedTokensUseCase],
     },
   ],
 })

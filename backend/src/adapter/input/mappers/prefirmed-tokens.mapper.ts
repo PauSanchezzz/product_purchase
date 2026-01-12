@@ -4,10 +4,10 @@ import { TypePrefirmedTokensResponseDto } from "../dtos/response/get-prefirmed-t
 export abstract class PrefirmedTokensMapper {
     static toResponse(data: PrefirmedTokenModel[]): TypePrefirmedTokensResponseDto {
         const personalDataAuth = data.find(token => token.type === 'PERSONAL_DATA_AUTH')
-        const acceptanceToken = data.find(token => token.type === 'END_USER_POLICY')
+        const endUserPolicy = data.find(token => token.type === 'END_USER_POLICY')
         return {
             personalDataAuth: personalDataAuth!,
-            acceptanceToken: acceptanceToken!
+            endUserPolicy: endUserPolicy!
         }        
     }
 }

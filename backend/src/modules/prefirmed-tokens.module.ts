@@ -5,20 +5,23 @@ import { GetPrefirmedTokensHandler } from 'src/adapter/input/handlers/get-prefir
 import { PrefirmedTokensWompiRepository } from 'src/adapter/output/wompi/repository/prefirmed-tokens.wompi.respository';
 
 
+import { IPrefirmedTokensRepository } from 'domain/prefirmed-tokens/repository/prefirmed-tokens.respository';
+
+
 @Module({
   imports: [],
   controllers: [PrefirmedTokensController],
   providers: [
     {
-      provide: PrefirmedTokensWompiRepository,
+      provide: IPrefirmedTokensRepository,
       useClass: PrefirmedTokensWompiRepository,
     },
     {
         provide: GetPrefirmedTokensUseCase,
-        useFactory: (PrefirmedTokensWompiRepository: PrefirmedTokensWompiRepository) => {
-            return new GetPrefirmedTokensUseCase(PrefirmedTokensWompiRepository)
+        useFactory: (prefirmedTokensRepository: IPrefirmedTokensRepository) => {
+            return new GetPrefirmedTokensUseCase(prefirmedTokensRepository)
         },
-        inject: [PrefirmedTokensWompiRepository],
+        inject: [IPrefirmedTokensRepository],
     },
     {
         provide: GetPrefirmedTokensHandler,
@@ -28,6 +31,6 @@ import { PrefirmedTokensWompiRepository } from 'src/adapter/output/wompi/reposit
         inject: [GetPrefirmedTokensUseCase],
     }
   ],
-  exports: [GetPrefirmedTokensHandler],
+  exports: [GetPrefirmedTokensHandler, GetPrefirmedTokensUseCase, IPrefirmedTokensRepository],
 })
 export class PrefirmedTokensModule { }
