@@ -4,13 +4,15 @@ import { ConfigModule } from '@nestjs/config';
 import { typeOrmConfig } from './config/appDataSource';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductsModule } from './modules/products.module';
+import { OrderModule } from './modules/order.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot(typeOrmConfig),
     PrefirmedTokensModule,
-    ProductsModule
+    ProductsModule,
+    OrderModule
   ],
   controllers: [],
   providers: [],

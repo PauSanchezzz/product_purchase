@@ -45,6 +45,6 @@ import { GetProductHandler } from 'src/adapter/input/handlers/get-product.handle
         inject: [GetProductsUseCase],
     }
   ],
-  exports: [GetProductsHandler],
+  exports: [GetProductsHandler, ProductsPostgresRepository, TypeOrmModule],
 })
 export class ProductsModule { }
