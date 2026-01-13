@@ -1,0 +1,206 @@
+{
+	"info": {
+		"_postman_id": "890eada8-e319-405e-9d8c-6ea0acbe9c0d",
+		"name": "product_purchase",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "51420439",
+		"_collection_link": "https://pausanchezzz-2797123.postman.co/workspace/Paula-Andrea-Sanchez-Torres's-W~c731f816-b426-424c-8313-a419fe32c77c/collection/51420439-890eada8-e319-405e-9d8c-6ea0acbe9c0d?action=share&source=collection_link&creator=51420439"
+	},
+	"item": [
+		{
+			"name": "Get Prefirmed Token",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Base_Url}}/prefirmed-tokens",
+					"host": [
+						"{{Base_Url}}"
+					],
+					"path": [
+						"prefirmed-tokens"
+					]
+				},
+				"description": "### **Obtener tokens de aceptación prefirmados**\n\nEste endpoint permite obtener los **tokens de aceptación** necesarios para que un usuario final acepte los términos y políticas requeridas antes de realizar operaciones como pagos.\n\n### URL\n\n``` antlr4\n/prefirmed-tokens\n\n ```\n\n### Método\n\n```\nGET\n\n ```\n\n---\n\n## Respuesta exitosa\n\n```\n[\n  {\n    \"permalink\": \"https://wompi.com/assets/downloadble/reglamento-Usuarios-Colombia.pdf\",\n    \"type\": \"END_USER_POLICY\",\n    \"acceptance_token\": \"eyJhbGciOiJIUzI1NiJ9...\"\n  },\n  {\n    \"permalink\": \"https://wompi.com/assets/downloadble/autorizacion-tratamiento-datos-personales.pdf\",\n    \"type\": \"PERSONAL_DATA_AUTH\",\n    \"acceptance_token\": \"eyJhbGciOiJIUzI1NiJ9...\"\n  }\n]\n\n ```\n\n---\n\n## Descripción de campos\n\n| Campo | Descripción |\n| --- | --- |\n| permalink | URL del documento legal que el usuario debe aceptar |\n| type | Tipo de documento legal |\n| acceptance_token | Token prefirmado que confirma la aceptación del documento |\n\n### Tipos posibles (`type`)\n\n- `END_USER_POLICY`: Reglamento o términos de uso\n    \n- `PERSONAL_DATA_AUTH`: Autorización de tratamiento de datos personales"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Products",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Base_Url}}/products",
+					"host": [
+						"{{Base_Url}}"
+					],
+					"path": [
+						"products"
+					]
+				},
+				"description": "## Obtener listado de productos\n\nEste endpoint permite obtener el **listado completo de productos disponibles**, incluyendo información básica como nombre, precio, stock, imagen y descripción.\n\n---\n\n## URL\n\n```\n/products\n\n ```\n\n## Método\n\n```\nGET\n\n ```\n\n---\n\n## Respuesta exitosa\n\n```\n{\n  \"productsList\": [\n    {\n      \"id\": 1,\n      \"name\": \"Camiseta básica blanca\",\n      \"image\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJRT6-I7NFT75nDZA_brazRDVYmWpYGKHgQQ&s\",\n      \"price\": 50,\n      \"stock\": 35000,\n      \"description\": \"Camiseta de algodón 100% color blanco, ideal para uso diario\"\n    },\n    {\n      \"id\": 2,\n      \"name\": \"Camiseta básica negra\",\n      \"image\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSuxLjkkxghcniMhyf7e33mJxN9tiCEXHko8A&s\",\n      \"price\": 45,\n      \"stock\": 35000,\n      \"description\": \"Camiseta de algodón 100% color negro, cómoda y versátil\"\n    }\n  ]\n}\n\n ```\n\n---\n\n## Descripción de campos\n\n### Objeto raíz\n\n| Campo | Tipo | Descripción |\n| --- | --- | --- |\n| productsList | Array | Lista de productos disponibles |\n\n### Producto\n\n| Campo | Tipo | Descripción |\n| --- | --- | --- |\n| id | number | Identificador único del producto |\n| name | string | Nombre del producto |\n| image | string (URL) | Imagen representativa del producto |\n| price | number | Precio unitario del producto |\n| stock | number | Cantidad disponible en inventario |\n| description | string | Descripción del producto |"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Product",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Base_Url}}/products/1",
+					"host": [
+						"{{Base_Url}}"
+					],
+					"path": [
+						"products",
+						"1"
+					]
+				},
+				"description": "## Obtener detalle de un producto\n\nEste endpoint permite obtener la **información detallada de un producto específico** a partir de su identificador.\n\n---\n\n## URL\n\n```\n/products/{id}\n\n ```\n\n## Método\n\n```\nGET\n\n ```\n\n---\n\n## Parámetros de ruta\n\n| Parámetro | Tipo | Requerido | Descripción |\n| --- | --- | --- | --- |\n| id | number | Sí | Identificador único del producto |\n\n## Respuesta exitosa\n\n```\n{\n  \"product\": {\n    \"id\": 1,\n    \"name\": \"Camiseta básica blanca\",\n    \"image\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJRT6-I7NFT75nDZA_brazRDVYmWpYGKHgQQ&s\",\n    \"price\": 50,\n    \"stock\": 35000,\n    \"description\": \"Camiseta de algodón 100% color blanco, ideal para uso diario\"\n  }\n}\n\n ```\n\n---\n\n## Descripción de campos\n\n### Objeto `product`\n\n| Campo | Tipo | Descripción |\n| --- | --- | --- |\n| id | number | Identificador único del producto |\n| name | string | Nombre del producto |\n| image | string (URL) | Imagen del producto |\n| price | number | Precio unitario |\n| stock | number | Cantidad disponible |\n| description | string | Descripción del producto |"
+			},
+			"response": []
+		},
+		{
+			"name": "Create Order",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"productId\": 1,\r\n  \"quantity\": 5\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Base_Url}}/orders",
+					"host": [
+						"{{Base_Url}}"
+					],
+					"path": [
+						"orders"
+					]
+				},
+				"description": "## Crear una orden\n\nEste endpoint permite **crear una orden de compra** a partir de un producto y una cantidad específica.\n\nLa respuesta incluye el cálculo de costos, totales y los **tokens prefirmados de aceptación** requeridos para continuar con el flujo de pago.\n\n---\n\n## URL\n\n```\n/orders\n\n ```\n\n## Método\n\n```\nPOST\n\n ```\n\n## Body (JSON)\n\n| Campo | Tipo | Requerido | Descripción |\n| --- | --- | --- | --- |\n| productId | number | Sí | Identificador del producto |\n| quantity | number | Sí | Cantidad de unidades a comprar |\n\n### Ejemplo de body\n\n```\n{\n  \"productId\": 1,\n  \"quantity\": 5\n}\n\n ```\n\n---\n\n## Respuesta exitosa\n\n```\n{\n  \"id\": \"88834ecd-6752-4982-9610-2c959b9c7711\",\n  \"productId\": 1,\n  \"quantity\": 5,\n  \"shippingCost\": 4277,\n  \"subtotal\": 250,\n  \"total\": 4527,\n  \"createdAt\": \"2026-01-12T11:04:33.485Z\",\n  \"prefirmedToken\": {\n    \"personalDataAuth\": {\n      \"permalink\": \"https://wompi.com/assets/downloadble/autorizacion-tratamiento-datos-personales.pdf\",\n      \"type\": \"PERSONAL_DATA_AUTH\",\n      \"acceptance_token\": \"eyJhbGciOiJIUzI1NiJ9...\"\n    },\n    \"endUserPolicy\": {\n      \"permalink\": \"https://wompi.com/assets/downloadble/reglamento-Usuarios-Colombia.pdf\",\n      \"type\": \"END_USER_POLICY\",\n      \"acceptance_token\": \"eyJhbGciOiJIUzI1NiJ9...\"\n    }\n  }\n}\n\n ```\n\n---\n\n## Descripción de campos\n\n### Orden\n\n| Campo | Tipo | Descripción |\n| --- | --- | --- |\n| id | string (UUID) | Identificador único de la orden |\n| productId | number | Producto asociado a la orden |\n| quantity | number | Cantidad solicitada |\n| shippingCost | number | Costo de envío calculado |\n| subtotal | number | Precio del producto × cantidad |\n| total | number | Subtotal + costo de envío |\n| createdAt | string (ISO 8601) | Fecha de creación de la orden |\n\n---\n\n### Objeto `prefirmedToken`\n\nContiene los **tokens legales obligatorios** que el usuario debe aceptar antes de continuar con el pago.\n\n#### personalDataAuth\n\n| Campo | Descripción |\n| --- | --- |\n| permalink | URL del documento de autorización de datos personales |\n| type | `PERSONAL_DATA_AUTH` |\n| acceptance_token | Token prefirmado de aceptación |\n\n#### endUserPolicy\n\n| Campo | Descripción |\n| --- | --- |\n| permalink | URL del reglamento de usuarios |\n| type | `END_USER_POLICY` |\n| acceptance_token | Token prefirmado de aceptación |"
+			},
+			"response": []
+		},
+		{
+			"name": "Update prefirmedToken",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"personalDataAuth\": {\r\n        \"acceptance_token\": \"eyJhbGciOiJIUzI1NiJ9.eyJjb250cmFjdF9pZCI6NDc0LCJ....\"\r\n    },\r\n    \"endUserPolicy\": {\r\n        \"acceptance_token\": \"eyJhbGciOiJIUzI1NiJ9.eyJjb250cmFjdF9pZCI6NDc0LCJ....\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Base_Url}}/orders/update-links/f69291fd-0fd5-4c26-9726-3c759505a8cd",
+					"host": [
+						"{{Base_Url}}"
+					],
+					"path": [
+						"orders",
+						"update-links",
+						"f69291fd-0fd5-4c26-9726-3c759505a8cd"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Payment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"card\": {\r\n        \"number\": \"4242424242424242\",\r\n        \"cvc\": \"3434\",\r\n        \"exp_month\": \"12\",\r\n        \"exp_year\": \"34\",\r\n        \"card_holder\": \"Pedro Perez\"\r\n    },\r\n    \"orderId\": \"2081a501-7676-4894-aeb2-d06bc1dbbea3\",\r\n    \"shippingInformation\": {\r\n        \"customer\": \"Pedro Perez\",\r\n        \"customerEmail\": \"test@test.com\",\r\n        \"address\": \"cll 8 a 20 sur 80\",\r\n        \"country\": \"OO\",\r\n        \"region\": \"Bogotá\",\r\n        \"city\": \"Bogota\",\r\n        \"postalCode\": \"11073118\",\r\n        \"phone\": \"3058826577\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{Base_Url}}/orders/payment",
+					"host": [
+						"{{Base_Url}}"
+					],
+					"path": [
+						"orders",
+						"payment"
+					]
+				},
+				"description": "## Realizar pago de una orden\n\nEste endpoint permite **procesar el pago de una orden previamente creada**, enviando la información de la tarjeta y los datos de envío del cliente.\n\n---\n\n## URL\n\n```\n/orders/payment\n\n ```\n\n## Método\n\n```\nPOST\n\n ```\n\n---\n\n## Body (JSON)\n\n### Datos de la tarjeta (`card`)\n\n| Campo | Tipo | Requerido | Descripción |\n| --- | --- | --- | --- |\n| number | string | Sí | Número de la tarjeta |\n| cvc | string | Sí | Código de seguridad |\n| exp_month | string | Sí | Mes de expiración (MM) |\n| exp_year | string | Sí | Año de expiración (YY o YYYY según validación) |\n| card_holder | string | Sí | Nombre del titular |\n\n---\n\n### Datos de la orden\n\n| Campo | Tipo | Requerido | Descripción |\n| --- | --- | --- | --- |\n| orderId | string (UUID) | Sí | Identificador de la orden |\n\n---\n\n### Información de envío (`shippingInformation`)\n\n| Campo | Tipo | Requerido | Descripción |\n| --- | --- | --- | --- |\n| customer | string | Sí | Nombre del cliente |\n| customerEmail | string | Sí | Correo electrónico |\n| address | string | Sí | Dirección de entrega |\n| country | string | Sí | País |\n| region | string | Sí | Departamento o región |\n| city | string | Sí | Ciudad |\n| postalCode | string | Sí | Código postal |\n| phone | string | Sí | Teléfono de contacto |\n\n---\n\n### Ejemplo de body\n\n```\n{\n    \"card\": {\n        \"number\": \"4242424242424242\",\n        \"cvc\": \"3434\",\n        \"exp_month\": \"12\",\n        \"exp_year\": \"34\",\n        \"card_holder\": \"Pedro Perez\"\n    },\n    \"orderId\": \"2081a501-7676-4894-aeb2-d06bc1dbbea3\",\n    \"shippingInformation\": {\n        \"customer\": \"Pedro Perez\",\n        \"customerEmail\": \"test@test.com\",\n        \"address\": \"cll 8 a 20 sur 80\",\n        \"country\": \"OO\",\n        \"region\": \"Bogotá\",\n        \"city\": \"Bogota\",\n        \"postalCode\": \"11073118\",\n        \"phone\": \"3058826577\"\n    }\n}\n\n ```\n\n## Posibles estados de pago\n\n| Estado | Descripción |\n| --- | --- |\n| APPROVED | Pago aprobado |\n| PENDING | Pago pendiente |\n| DECLINED | Pago rechazado |\n| ERROR | Error en el procesamiento |"
+			},
+			"response": []
+		},
+		{
+			"name": "Get One Order",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{Base_Url}}/orders/7c5ed3f9-6e28-4d86-954a-6d9f6dba3918",
+					"host": [
+						"{{Base_Url}}"
+					],
+					"path": [
+						"orders",
+						"7c5ed3f9-6e28-4d86-954a-6d9f6dba3918"
+					]
+				},
+				"description": "## Obtener detalle de una orden\n\nEste endpoint permite consultar la **información detallada de una orden**, incluyendo valores calculados y el **estado actual del pago**.\n\n---\n\n## URL\n\n```\n/orders/{id}\n\n ```\n\n## Método\n\n```\nGET\n\n ```\n\n---\n\n## Parámetros de ruta\n\n| Parámetro | Tipo | Requerido | Descripción |\n| --- | --- | --- | --- |\n| id | string (UUID) | Sí | Identificador único de la orden |\n\n---\n\n## Respuesta exitosa (200 OK)\n\n```\n{\n  \"id\": \"7c5ed3f9-6e28-4d86-954a-6d9f6dba3918\",\n  \"productId\": \"6\",\n  \"productName\": \"Gorra ajustable\",\n  \"quantity\": 4,\n  \"shippingCost\": 9558,\n  \"subtotal\": 160,\n  \"total\": 9718,\n  \"status\": \"PENDING\",\n}\n\n ```\n\n---\n\n## Descripción de campos\n\n| Campo | Tipo | Descripción |\n| --- | --- | --- |\n| id | string (UUID) | Identificador de la orden |\n| productId | string | Identificador del producto |\n| productName | string | Nombre del producto |\n| quantity | number | Cantidad comprada |\n| shippingCost | number | Costo de envío |\n| subtotal | number | Precio × cantidad |\n| total | number | Subtotal + envío |\n| status | string | Estado actual de la orden |\n| externalPaymentId | string | Identificador del pago en la pasarela |"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "Wompi_Base_Url",
+			"value": ""
+		},
+		{
+			"key": "Public_Key",
+			"value": ""
+		},
+		{
+			"key": "Base_Url",
+			"value": ""
+		}
+	]
+}
