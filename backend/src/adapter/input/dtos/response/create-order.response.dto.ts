@@ -8,5 +8,7 @@ export class CreateOrderResponseDto {
     subtotal: number;
     total: number;
     createdAt: Date;
+    status: string;
+    shippingInformation?: any;
     prefirmedToken: TypePrefirmedTokensResponseDto;
 }

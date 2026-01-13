@@ -12,6 +12,8 @@ export abstract class CreateOrderMapper {
             subtotal: order.subtotal,
             total: order.total,
             createdAt: order.createdAt || new Date(),
+            status: order.status,
+            shippingInformation: order.shippingInformation,
             prefirmedToken: {
                 personalDataAuth: personalDataAuth,
                 endUserPolicy: endUserPolicy

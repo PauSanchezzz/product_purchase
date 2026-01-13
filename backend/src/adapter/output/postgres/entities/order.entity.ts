@@ -7,6 +7,8 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { ProductEntity } from './product.entity';
+import { ShippingEntity } from './shipping.entity';
+import { OrderStatus } from '../../../../../domain/order/model/order-status.enum';
 
 @Entity('orders')
 export class OrderEntity {
@@ -27,6 +29,25 @@ export class OrderEntity {
 
   @Column()
   total: number;
+
+  @Column({ type: 'varchar', default: OrderStatus.PENDING })
+  status: OrderStatus;
+
+  @Column({ nullable: true })
+  externalPaymentId: string;
+
+  @Column({ nullable: true })
+  shippingId: number;
+
+  @ManyToOne(() => ShippingEntity)
+  @JoinColumn({ name: 'shippingId' })
+  shipping: ShippingEntity;
+
+  @Column({ nullable: true })
+  personalDataAuthToken: string;
+
+  @Column({ nullable: true })
+  endUserPolicyToken: string;
 
   @CreateDateColumn()
   createdAt: Date;

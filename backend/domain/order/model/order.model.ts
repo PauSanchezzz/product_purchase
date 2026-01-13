@@ -1,3 +1,7 @@
+import { PrefirmedTokenModel } from "domain/prefirmed-tokens/model/prefirmed-tokens.model";
+import { OrderStatus } from "./order-status.enum";
+import { ShippingInformationModel } from "domain/shipping/model/shipping.model";
+
 export class OrderModel {
     constructor(
         public readonly id: string,
@@ -7,5 +11,11 @@ export class OrderModel {
         public readonly subtotal: number,
         public readonly total: number,
         public readonly createdAt?: Date,
+        public readonly status: OrderStatus = OrderStatus.PENDING,
+        public readonly externalPaymentId?: string,
+        public readonly shippingInformation?: ShippingInformationModel,
+        public readonly personalDataAuthToken?: string,
+        public readonly endUserPolicyToken?: string,
+        public readonly productName?: string,
     ) {}
 }

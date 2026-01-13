@@ -9,7 +9,10 @@ export class CreateOrderUseCase {
         private readonly productRepository: IProductsRepository
     ) {}
 
-    async execute(productId: number, quantity: number): Promise<OrderModel> {
+    async execute(
+        productId: number, 
+        quantity: number,
+    ): Promise<OrderModel> {
         const product = await this.productRepository.getProductById(productId);
         if (!product) {
             throw new Error('Product not found');
@@ -26,7 +29,7 @@ export class CreateOrderUseCase {
             quantity,
             shippingCost,
             subtotal,
-            total
+            total,
         );
 
         return await this.orderRepository.createOrder(order);

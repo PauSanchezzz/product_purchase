@@ -21,7 +21,10 @@ export class CreateOrderHandler {
         }
         const order = await this.createOrderUseCase.execute(
             createOrderDto.productId,
-            createOrderDto.quantity
+            createOrderDto.quantity,
+            createOrderDto.shippingInformation,
+            personalDataAuth.acceptance_token,
+            endUserPolicy.acceptance_token
         );
         return CreateOrderMapper.toResponseDto(order, personalDataAuth!, endUserPolicy!);
     }
