@@ -26,12 +26,14 @@ export const initialState = {
       },
     },
     shipping: {
-      name: '',
+      customer: '',
+      customerEmail: '',
       address: '',
+      country: 'CO',
+      region: '',
       city: '',
-      state: '',
-      zipCode: '',
-      country: '',
+      postalCode: '',
+      phone: '',
     },
     payment: {
       cardNumber: '',

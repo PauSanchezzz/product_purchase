@@ -7,38 +7,45 @@ import InputIcon from 'primevue/inputicon'
 import InputText from 'primevue/inputtext'
 import Button from 'primevue/button'
 import { useStore } from 'vuex'
-import { nextTick, onMounted } from 'vue'
+import { computed, nextTick, onMounted } from 'vue'
 
 const store = useStore()
+const isLoading = computed(() => store.getters['order/isLoading'])
 const emit = defineEmits(['nextStep', 'prevStep'])
 
 const { handleSubmit, errors, meta, resetForm } = useForm({
   validationSchema: toTypedSchema(
     z.object({
-      firstName: z
+      customer: z
         .string({ message: 'El nombre es obligatorio' })
         .min(1, 'El nombre es obligatorio'),
-      lastName: z
-        .string({ message: 'El apellido es obligatorio' })
-        .min(1, 'El apellido es obligatorio'),
+      customerEmail: z
+        .string({ message: 'El correo electrónico es obligatorio' })
+        .email('Correo electrónico no válido')
+        .min(1, 'El correo electrónico es obligatorio'),
       address: z
         .string({ message: 'La dirección es obligatoria' })
         .min(1, 'La dirección es obligatoria'),
+      region: z
+        .string({ message: 'La región/estado es obligatoria' })
+        .min(1, 'La región/estado es obligatoria'),
+      city: z.string({ message: 'La ciudad es obligatoria' }).min(1, 'La ciudad es obligatoria'),
       postalCode: z
         .string({ message: 'El código postal es obligatorio' })
         .min(1, 'El código postal es obligatorio'),
-      phoneNumber: z
+      phone: z
         .string({ message: 'El número de teléfono es obligatorio' })
         .min(1, 'El número de teléfono es obligatorio'),
     }),
   ),
 })
-
-const { value: firstName } = useField<string>('firstName')
-const { value: lastName } = useField<string>('lastName')
+const { value: customer } = useField<string>('customer')
+const { value: customerEmail } = useField<string>('customerEmail')
 const { value: address } = useField<string>('address')
+const { value: region } = useField<string>('region')
+const { value: city } = useField<string>('city')
 const { value: postalCode } = useField<string>('postalCode')
-const { value: phoneNumber } = useField<string>('phoneNumber')
+const { value: phone } = useField<string>('phone')
 
 const onSubmit = handleSubmit(async (values, $event: any) => {
   emit('nextStep', '3')
@@ -47,11 +54,13 @@ const onSubmit = handleSubmit(async (values, $event: any) => {
 const setInformation = () => {
   resetForm({
     values: {
-      firstName: store.state.purchase.shipping.firstName,
-      lastName: store.state.purchase.shipping.lastName,
+      customer: store.state.purchase.shipping.customer,
+      customerEmail: store.state.purchase.shipping.customerEmail,
       address: store.state.purchase.shipping.address,
+      region: store.state.purchase.shipping.region,
+      city: store.state.purchase.shipping.city,
       postalCode: store.state.purchase.shipping.postalCode,
-      phoneNumber: store.state.purchase.shipping.phoneNumber,
+      phone: store.state.purchase.shipping.phone,
     },
   })
 }
@@ -60,11 +69,14 @@ const addInformation = () => {
   store.commit('setPurchase', {
     ...store.state.purchase,
     shipping: {
-      firstName: firstName.value,
-      lastName: lastName.value,
+      customer: customer.value,
+      customerEmail: customerEmail.value,
       address: address.value,
+      country: 'CO',
+      region: region.value,
+      city: city.value,
       postalCode: postalCode.value,
-      phoneNumber: phoneNumber.value,
+      phone: phone.value,
     },
   })
 }
@@ -83,29 +95,28 @@ onMounted(() => {
       <IconField>
         <InputIcon class="pi pi-user" />
         <InputText
-          v-model="firstName"
+          v-model="customer"
           class="w-full"
-          id="firstName"
+          id="customer"
           placeholder="Nombre"
           @input="addInformation"
         />
       </IconField>
       <ErrorMessage class="error-message" name="firstName" />
     </div>
-
     <div class="flex flex-col gap-2">
-      <label class="labels" for="lastName">Apellido:</label>
+      <label class="labels" for="customerEmail">Correo electrónico:</label>
       <IconField>
-        <InputIcon class="pi pi-user" />
+        <InputIcon class="pi pi-envelope" />
         <InputText
-          v-model="lastName"
+          v-model="customerEmail"
           class="w-full"
-          id="lastName"
-          placeholder="Apellido"
+          id="customerEmail"
+          placeholder="Correo electrónico"
           @input="addInformation"
         />
       </IconField>
-      <ErrorMessage class="error-message" name="lastName" />
+      <ErrorMessage class="error-message" name="customerEmail" />
     </div>
 
     <div class="flex flex-col gap-2">
@@ -116,7 +127,7 @@ onMounted(() => {
           v-model="address"
           class="w-full"
           id="address"
-          placeholder="Dirección completo"
+          placeholder="Dirección completa"
           @input="addInformation"
         />
       </IconField>
@@ -124,42 +135,74 @@ onMounted(() => {
     </div>
 
     <div class="flex flex-col gap-2">
-      <label class="labels" for="postalCode">Código postal:</label>
+      <label class="labels" for="region">Región / Estado:</label>
       <IconField>
         <InputIcon class="pi pi-map" />
         <InputText
-          v-keyfilter.int
-          v-model="postalCode"
+          v-model="region"
           class="w-full"
-          id="postalCode"
-          placeholder="Código postal"
+          id="region"
+          placeholder="Ej: Antioquia"
           @input="addInformation"
-          maxlength="8"
         />
       </IconField>
-      <ErrorMessage class="error-message" name="postalCode" />
+      <ErrorMessage class="error-message" name="region" />
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="flex flex-col gap-2">
+        <label class="labels" for="city">Ciudad:</label>
+        <IconField>
+          <InputIcon class="pi pi-building" />
+          <InputText
+            v-model="city"
+            class="w-full"
+            id="city"
+            placeholder="Ej: Medellin"
+            @input="addInformation"
+          />
+        </IconField>
+        <ErrorMessage class="error-message" name="city" />
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label class="labels" for="postalCode">Código postal:</label>
+        <IconField>
+          <InputIcon class="pi pi-map" />
+          <InputText
+            v-keyfilter.int
+            v-model="postalCode"
+            class="w-full"
+            id="postalCode"
+            placeholder="Código postal"
+            @input="addInformation"
+            maxlength="8"
+          />
+        </IconField>
+        <ErrorMessage class="error-message" name="postalCode" />
+      </div>
     </div>
 
     <div class="flex flex-col gap-2">
-      <label class="labels" for="phoneNumber">Número de teléfono:</label>
+      <label class="labels" for="phone">Número de teléfono:</label>
       <IconField>
         <InputIcon class="pi pi-phone" />
         <InputText
           v-keyfilter.int
-          v-model="phoneNumber"
+          v-model="phone"
           class="w-full"
-          id="phoneNumber"
+          id="phone"
           placeholder="Número de teléfono"
           @input="addInformation"
           maxlength="10"
         />
       </IconField>
-      <ErrorMessage class="error-message" name="phoneNumber" />
+      <ErrorMessage class="error-message" name="phone" />
     </div>
 
     <div class="flex py-6 gap-2">
       <Button label="Anterior" severity="secondary" @click="emit('prevStep')" />
-      <Button label="Siguiente" class="general-button" @click="onSubmit" />
+      <Button type="submit" label="Realizar pago" :loading="isLoading" @click="onSubmit" />
     </div>
   </div>
 </template>

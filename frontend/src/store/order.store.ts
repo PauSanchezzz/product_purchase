@@ -4,6 +4,7 @@ import type {
   FormUpdatePrefirmedToken,
   GetOrderResponse,
 } from '@/interfaces/order.interface'
+import type { FormCreatePayment } from '@/interfaces/payment.interface'
 
 export interface OrderState {
   orderResponse: CreateOrderResponse | GetOrderResponse | null
@@ -143,6 +144,33 @@ const orderModule = {
       } catch (error: any) {
         commit('set_error', error.message)
         console.error('Fetch error:', error)
+        throw error
+      } finally {
+        commit('set_loading', false)
+      }
+    },
+
+    async processPayment({ commit }: any, payload: FormCreatePayment) {
+      commit('set_loading', true)
+      commit('set_error', null)
+      try {
+        const response = await fetch(`${ORDER_URL}/payment`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        })
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}))
+          throw new Error(errorData.message || `Fetch error: ${response.statusText}`)
+        }
+
+        return await response.json()
+      } catch (error: any) {
+        commit('set_error', error.message)
+        console.error('Payment processing error:', error)
         throw error
       } finally {
         commit('set_loading', false)

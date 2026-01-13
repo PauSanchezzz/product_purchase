@@ -16,7 +16,7 @@ const purchase = computed(() => store.state.purchase)
 
 const statusInfo = computed(() => {
   switch (orderResponse?.value?.status.toLowerCase()) {
-    case 'approve':
+    case 'completed':
       return {
         image: '/img/approve.png',
         title: 'Gracias por su compra',
@@ -77,13 +77,6 @@ onMounted(() => {
       <div class="divider"></div>
 
       <div class="details-section">
-        <div class="detail-item">
-          <p class="label">Cliente:</p>
-          <p class="value">
-            {{ purchase.shipping.name }} ({{ orderResponse?.customerEmail || 'n/a' }})
-          </p>
-        </div>
-
         <div class="detail-item">
           <p class="label">Método de pago:</p>
           <p class="value">Tarjeta de crédito/debito</p>

@@ -9,9 +9,11 @@ import ShippingDetails from '@/components/checkout/shippingDetails.vue'
 import SummaryCard from '@/components/summaryCard.vue'
 import { computed } from 'vue'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 
 const store = useStore()
-const purchase = computed(() => store.state.order)
+const router = useRouter()
+const purchase = computed(() => store.state.purchase)
 
 const orderResponse = computed(() => store.getters['order/orderResponse'])
 const orderId = computed(() => orderResponse.value?.id)
@@ -32,6 +34,31 @@ const approveTerms = () => {
     orderId: orderId.value,
     payload: prefirmedToken,
   })
+}
+
+const sendOrder = async () => {
+  const payment = store.state.purchase.payment
+  const [exp_month, exp_year] = payment.cardExpiration.split('/')
+
+  const paymentTransformed = {
+    number: payment.cardNumber.replace(/\s/g, ''),
+    cvc: payment.cardCvv,
+    exp_month: exp_month,
+    exp_year: exp_year.slice(-2),
+    card_holder: payment.cardHolder,
+  }
+
+  const sendData = {
+    card: paymentTransformed,
+    orderId: orderId.value,
+    shippingInformation: purchase.value.shipping,
+  }
+
+  try {
+    await store.dispatch('order/processPayment', sendData)
+  } finally {
+    router.push({ name: 'payment-result' })
+  }
 }
 </script>
 
@@ -66,7 +93,11 @@ const approveTerms = () => {
             <Step>Detalle de envío</Step>
             <StepPanel v-slot="{ activateCallback }">
               <ShippingDetails
-                @nextStep="activateCallback('4')"
+                @nextStep="
+                  () => {
+                    sendOrder()
+                  }
+                "
                 @prevStep="activateCallback('2')"
               />
             </StepPanel>
