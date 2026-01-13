@@ -1,6 +1,9 @@
 @import './base.css';
 @import 'tailwindcss';
-
+@import './button.css';
+@import './dialog.css';
+@import './typography.css';
+@import './stepper.css';
 a,
 .green {
   text-decoration: none;

@@ -1,0 +1,97 @@
+<script setup lang="ts">
+import router from '@/router'
+import { formatPrice, truncateWords } from '@/utils/mixins'
+import { computed, nextTick, onMounted } from 'vue'
+import { useStore } from 'vuex'
+
+const store = useStore()
+
+/* Store */
+const productSelected = computed(() => store.state.product)
+const totalPrice = computed(() => store.getters.totalPrice)
+const orderResponse = computed(() => store.getters['order/orderResponse'])
+
+onMounted(() => {
+  nextTick(async () => {
+    if (productSelected.value.quantity === 0) {
+      router.push('/')
+    }
+  })
+})
+</script>
+
+<template>
+  <div class="summary">
+    <p class="text-l pb-4">Resumen de la compra</p>
+    <div class="detail-product">
+      <div class="image-container">
+        <img :src="productSelected.image" alt="product-image" />
+      </div>
+      <div>
+        <p class="text-m--bold">{{ productSelected.name }}</p>
+        <p class="text-s--gray">
+          {{ truncateWords(productSelected.description, 12) }}
+        </p>
+        <p class="text-m--semibold">
+          {{ `${formatPrice(productSelected.price)} x ${productSelected.quantity}` }}
+        </p>
+      </div>
+    </div>
+    <hr />
+    <div class="detail-summary">
+      <div>
+        <p class="text-m--bold">Subtotal</p>
+        <p class="text-m--semibold">{{ formatPrice(totalPrice) }}</p>
+      </div>
+      <div>
+        <p class="text-m--bold">Envío</p>
+        <p class="text-m--semibold">{{ formatPrice(orderResponse.shippingCost) }}</p>
+      </div>
+      <hr />
+      <div>
+        <p class="text-m--bold">Total</p>
+        <p class="text-m--semibold">{{ formatPrice(totalPrice + orderResponse.shippingCost) }}</p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style lang="css" scoped>
+.summary {
+  background-color: white;
+  margin: 0 auto;
+  max-width: 500px;
+  padding: 2rem;
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0px 3px 6px #0c17431a;
+  hr {
+    margin: 1rem 0;
+    color: #d4d4d4;
+  }
+  .detail-product {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    .image-container {
+      width: 100px;
+      height: 100px;
+      border-radius: 8px;
+      overflow: hidden;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+  .detail-summary {
+    display: flex;
+    flex-direction: column;
+    div {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}
+</style>

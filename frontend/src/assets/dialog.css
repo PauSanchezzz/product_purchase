@@ -1,0 +1,12 @@
+.general-dialog.p-dialog.p-component {
+  margin: 20px;
+  .p-dialog-header {
+    .title {
+      font-size: 1rem;
+      font-weight: bold;
+    }
+  }
+  .p-dialog-footer {
+    padding: 1rem;
+  }
+}

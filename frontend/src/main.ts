@@ -6,6 +6,11 @@ import router from './router'
 import PrimeVue from 'primevue/config'
 import { definePreset } from '@primeuix/themes'
 import Aura from '@primeuix/themes/aura'
+import NbPaymentsComponents from '@vlalg-nimbus/nb-payments'
+import '@vlalg-nimbus/nb-payments/dist/style.css'
+import ToastService from 'primevue/toastservice'
+import store from '@/store/purchase.store'
+import KeyFilter from 'primevue/keyfilter'
 
 const customPreset = definePreset(Aura, {
   semantic: {
@@ -26,6 +31,9 @@ const customPreset = definePreset(Aura, {
 })
 
 const app = createApp(App)
+app.use(ToastService)
+app.directive('keyfilter', KeyFilter)
+
 app.use(PrimeVue, {
   theme: {
     preset: customPreset,
@@ -34,7 +42,8 @@ app.use(PrimeVue, {
     },
   },
 })
-
+app.use(NbPaymentsComponents)
 app.use(router)
+app.use(store)
 
 app.mount('#app')

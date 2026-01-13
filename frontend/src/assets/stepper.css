@@ -1,0 +1,7 @@
+.p-stepper.p-component {
+  .p-stepitem {
+    .p-steppanel {
+      background-color: transparent;
+    }
+  }
+}
