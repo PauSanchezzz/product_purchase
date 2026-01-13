@@ -1,12 +1,12 @@
-export interface UpdateLinksDto {
- personalDataAuth: PersonalDataAuth
+export class PersonalDataAuth {
+  acceptance_token: string
+}
+
+export class EndUserPolicy {
+  acceptance_token: string
+}
+
+export class UpdateLinksDto {
+  personalDataAuth: PersonalDataAuth
   endUserPolicy: EndUserPolicy
-}
-
-export interface PersonalDataAuth {
-  acceptance_token: string
-}
-
-export interface EndUserPolicy {
-  acceptance_token: string
 }

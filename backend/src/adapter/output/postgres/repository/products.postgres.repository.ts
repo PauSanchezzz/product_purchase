@@ -32,5 +32,18 @@ export class ProductsPostgresRepository implements IProductsRepository {
             throw error
         }
     }
+
+    async updateProductStock(id: number, stock: number): Promise<ProductModel> {
+        try {
+            const product = await this.productRepository.findOne({ where: { id } })
+            if (!product) {
+                throw new Error('Product not found')
+            }
+            product.stock = stock
+            return await this.productRepository.save(product)
+        } catch (error) {
+            throw error
+        }
+    }
     
 }

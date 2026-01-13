@@ -14,6 +14,11 @@ import { UpdateLinksOrderUseCase } from 'domain/order/application/update-links-o
 import { UpdateLinksHandler } from 'src/adapter/input/handlers/update-links.handler';
 import { GetOrderUseCase } from 'domain/order/application/get-order.use-case';
 import { GetOrderHandler } from 'src/adapter/input/handlers/get-order.handler';
+import { PostPaymentHandler } from 'src/adapter/input/handlers/post-payment.handler';
+import { CompleteOrderUseCase } from 'domain/order/application/complete-order.use-case';
+import { ShippingPostgresRepository } from 'src/adapter/output/postgres/repository/shipping.repository';
+import { PaymentWompiRepository } from 'src/adapter/output/wompi/repository/payment.repository';
+
 
 @Module({
   imports: [
@@ -72,6 +77,34 @@ import { GetOrderHandler } from 'src/adapter/input/handlers/get-order.handler';
       },
       inject: [GetOrderUseCase],
     },
+    {
+      provide: ShippingPostgresRepository,
+      useClass: ShippingPostgresRepository,
+    },
+    {
+      provide: PaymentWompiRepository,
+      useClass: PaymentWompiRepository,
+    },
+    {
+      provide: CompleteOrderUseCase,
+      useFactory: (
+        orderRepository: OrderPostgresRepository,
+        productRepository: ProductsPostgresRepository,
+        shippingRepository: ShippingPostgresRepository,
+        paymentRepository: PaymentWompiRepository,
+      ) => {
+        return new CompleteOrderUseCase(orderRepository, productRepository, shippingRepository, paymentRepository);
+      },
+      inject: [OrderPostgresRepository, ProductsPostgresRepository, ShippingPostgresRepository, PaymentWompiRepository],
+    },
+    {
+      provide: PostPaymentHandler,
+      useFactory: (completeOrderUseCase: CompleteOrderUseCase) => {
+        return new PostPaymentHandler(completeOrderUseCase);
+      },
+      inject: [CompleteOrderUseCase],
+    },
+
   ],
 })
 export class OrderModule {}

@@ -1,18 +1,23 @@
 import { OrderModel } from "../model/order.model";
-import { OrderRepository } from "../repository/order.repository";
+import { IOrderRepository } from "../repository/order.repository";
 import { IProductsRepository } from "domain/products/repository/products.repository";
 import { v4 as uuidv4 } from 'uuid';
 
 export class CreateOrderUseCase {
     constructor(
-        private readonly orderRepository: OrderRepository,
+        private readonly orderRepository: IOrderRepository,
         private readonly productRepository: IProductsRepository
     ) {}
+
 
     async execute(
         productId: number, 
         quantity: number,
+        shippingInformation: any,
+        personalDataAuthToken: string,
+        endUserPolicyToken: string
     ): Promise<OrderModel> {
+
         const product = await this.productRepository.getProductById(productId);
         if (!product) {
             throw new Error('Product not found');
@@ -30,7 +35,14 @@ export class CreateOrderUseCase {
             shippingCost,
             subtotal,
             total,
+            undefined, // createdAt
+            undefined, // status (default)
+            undefined, // externalPaymentId
+            shippingInformation,
+            personalDataAuthToken,
+            endUserPolicyToken
         );
+
 
         return await this.orderRepository.createOrder(order);
     }

@@ -1,8 +1,8 @@
-import { OrderRepository } from "../repository/order.repository";
+import { IOrderRepository } from "../repository/order.repository";
 
 export class GetOrderUseCase {
     constructor(
-        private readonly orderRepository: OrderRepository
+        private readonly orderRepository: IOrderRepository
     ) {}
 
     async execute(orderId: string) {

@@ -2,12 +2,11 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { OrderModel } from "domain/order/model/order.model";
-import { OrderRepository } from "domain/order/repository/order.repository";
+import { IOrderRepository } from "domain/order/repository/order.repository";
 import { OrderEntity } from "../entities/order.entity";
-import { UpdateLinksDto } from "src/adapter/input/dtos/request/update-links.dto";
 
 @Injectable()
-export class OrderPostgresRepository implements OrderRepository {
+export class OrderPostgresRepository implements IOrderRepository {
     constructor(
         @InjectRepository(OrderEntity)
         private readonly orderRepository: Repository<OrderEntity>,
@@ -31,13 +30,13 @@ export class OrderPostgresRepository implements OrderRepository {
         }
     }
 
-    async updateLinksOrder(orderId: string, updateLinksDto: UpdateLinksDto) {
+    async updateLinksOrder(orderId: string, personalDataAuthToken: string, endUserPolicyToken: string) {
         const order = await this.orderRepository.findOneBy({ id: orderId });
         if (!order) {
             throw new Error('Order not found');
         }
-        order.personalDataAuthToken = updateLinksDto.personalDataAuth.acceptance_token;
-        order.endUserPolicyToken = updateLinksDto.endUserPolicy.acceptance_token;
+        order.personalDataAuthToken = personalDataAuthToken;
+        order.endUserPolicyToken = endUserPolicyToken;
         return this.orderRepository.save(order);
     }
 
@@ -66,5 +65,9 @@ export class OrderPostgresRepository implements OrderRepository {
             order.endUserPolicyToken,
             order.product?.name
         );
+    }
+
+    async updateOrder(order: OrderModel) {
+        return this.orderRepository.save(order);
     }
 }

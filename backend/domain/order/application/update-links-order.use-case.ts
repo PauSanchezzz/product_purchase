@@ -1,10 +1,11 @@
 import { UpdateLinksDto } from "src/adapter/input/dtos/request/update-links.dto";
-import { OrderRepository } from "../repository/order.repository";
+import { IOrderRepository } from "../repository/order.repository";
 
 export class UpdateLinksOrderUseCase {
     constructor(
-        private readonly orderRepository: OrderRepository
+        private readonly orderRepository: IOrderRepository
     ) {}
+
 
     async execute(orderId: string, personalDataAuthToken: string, endUserPolicyToken: string) {
         try {
