@@ -9,6 +9,7 @@ const store = useStore()
 /* Store */
 const productSelected = computed(() => store.state.product)
 const totalPrice = computed(() => store.getters.totalPrice)
+const orderResponse = computed(() => store.getters['order/orderResponse'])
 
 onMounted(() => {
   nextTick(async () => {
@@ -44,12 +45,12 @@ onMounted(() => {
       </div>
       <div>
         <p class="text-m--bold">Envío</p>
-        <p class="text-m--semibold">{{ formatPrice(10000) }}</p>
+        <p class="text-m--semibold">{{ formatPrice(orderResponse.shippingCost) }}</p>
       </div>
       <hr />
       <div>
         <p class="text-m--bold">Total</p>
-        <p class="text-m--semibold">{{ formatPrice(totalPrice + 10000) }}</p>
+        <p class="text-m--semibold">{{ formatPrice(totalPrice + orderResponse.shippingCost) }}</p>
       </div>
     </div>
   </div>

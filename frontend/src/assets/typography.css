@@ -35,3 +35,10 @@
   font-weight: 600;
   font-size: 12px;
 }
+.link {
+  color: #09508a;
+  text-decoration: underline;
+  &:hover {
+    background-color: #cce0f5;
+  }
+}

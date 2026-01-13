@@ -3,4 +3,9 @@
   &.payment {
     padding: 8px 3rem;
   }
+  &.payment-result {
+    border: none;
+    margin-top: 1rem;
+    padding: 8px 3rem;
+  }
 }

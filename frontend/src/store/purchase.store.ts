@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import productsModule from './products.store'
+import orderModule from './order.store'
 
 const STORAGE_KEY = 'purchase_store'
 
@@ -13,9 +14,16 @@ export const initialState = {
     quantity: 0,
   },
   purchase: {
+    step: 1,
     terms: {
-      term1: false,
-      term2: false,
+      personalDataAuth: {
+        accepted: false,
+        acceptance_token: '',
+      },
+      endUserPolicy: {
+        accepted: false,
+        acceptance_token: '',
+      },
     },
     shipping: {
       name: '',
@@ -41,6 +49,7 @@ export const createPurchaseStore = (preloadedState?: any) => {
     state,
     modules: {
       products: productsModule,
+      order: orderModule,
     },
     getters: {
       product: (state: any) => state.product,
@@ -69,7 +78,9 @@ export const createPurchaseStore = (preloadedState?: any) => {
       },
       clearStore({ commit }: any) {
         commit('clearStore')
+        commit('order/clearStore')
         localStorage.removeItem(STORAGE_KEY)
+        localStorage.removeItem('order_store')
       },
     },
     plugins: [

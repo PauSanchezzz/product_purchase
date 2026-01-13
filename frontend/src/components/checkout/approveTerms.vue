@@ -3,43 +3,58 @@ import { ErrorMessage, useField, useForm } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import * as z from 'zod'
 import Checkbox from 'primevue/checkbox'
-import { nextTick, onMounted } from 'vue'
+import { nextTick, onMounted, computed } from 'vue'
 import Button from 'primevue/button'
 import { useStore } from 'vuex'
 
 const store = useStore()
 const emit = defineEmits(['nextStep'])
 
+const orderResponse = computed(() => store.getters['order/orderResponse'])
+const personalDataAuthStore = computed(() => orderResponse.value?.prefirmedToken?.personalDataAuth)
+const endUserPolicyStore = computed(() => orderResponse.value?.prefirmedToken?.endUserPolicy)
+
 const { handleSubmit, errors, meta, resetForm } = useForm({
   validationSchema: toTypedSchema(
     z.object({
-      terms: z
-        .boolean({ message: 'Debes aceptar los términos y condiciones' })
+      personalDataAuth: z
+        .boolean({ message: 'Debes aceptar el tratamiento de datos personales' })
         .refine((value) => value === true, {
-          message: 'Debes aceptar los términos y condiciones',
+          message: 'Debes aceptar el tratamiento de datos personales',
         }),
-      secondTerms: z
-        .boolean({ message: 'Debes aceptar los términos y  2' })
+      endUserPolicy: z
+        .boolean({ message: 'Debes aceptar la política de usuario final' })
         .refine((value) => value === true, {
-          message: 'Debes aceptar los términos y  2',
+          message: 'Debes aceptar la política de usuario final',
         }),
     }),
   ),
 })
 
-const { value: terms } = useField<boolean>('terms')
-const { value: secondTerms } = useField<boolean>('secondTerms')
+const { value: personalDataAuth } = useField<boolean>('personalDataAuth')
+const { value: endUserPolicy } = useField<boolean>('endUserPolicy')
 
 const onSubmit = handleSubmit(async (values, $event: any) => {
   emit('nextStep', '2')
+  store.commit('setPurchase', {
+    ...store.state.purchase,
+    step: 2,
+  })
 })
 
 const onTermsChange = () => {
   store.commit('setPurchase', {
     ...store.state.purchase,
+    step: 1,
     terms: {
-      term1: terms.value,
-      term2: secondTerms.value,
+      personalDataAuth: {
+        accepted: personalDataAuth.value,
+        acceptance_token: personalDataAuthStore.value.acceptance_token,
+      },
+      endUserPolicy: {
+        accepted: endUserPolicy.value,
+        acceptance_token: endUserPolicyStore.value.acceptance_token,
+      },
     },
   })
 }
@@ -47,8 +62,8 @@ const onTermsChange = () => {
 const setInformation = () => {
   resetForm({
     values: {
-      terms: store.state.purchase.terms.term1,
-      secondTerms: store.state.purchase.terms.term2,
+      personalDataAuth: store.state.purchase.terms.personalDataAuth.accepted,
+      endUserPolicy: store.state.purchase.terms.endUserPolicy.accepted,
     },
   })
 }
@@ -64,17 +79,32 @@ onMounted(() => {
   <div class="flex flex-col gap-3">
     <div>
       <div class="flex items-center gap-3">
-        <Checkbox v-model="terms" binary inputId="terms" @change="onTermsChange" />
-        <label for="terms"> Terminos y condiciones </label>
+        <Checkbox
+          v-model="personalDataAuth"
+          binary
+          inputId="personalDataAuth"
+          @change="onTermsChange"
+        />
+        <label for="personalDataAuth">
+          Acepto
+          <a :href="personalDataAuthStore.permalink" target="_blank" class="link">
+            Tratamiento de datos Personales
+          </a>
+        </label>
       </div>
-      <ErrorMessage class="error-message" name="terms" />
+      <ErrorMessage class="error-message" name="personalDataAuth" />
     </div>
     <div>
       <div class="flex items-center gap-3">
-        <Checkbox v-model="secondTerms" binary inputId="secondTerms" @change="onTermsChange" />
-        <label for="secondTerms"> Terminos y condiciones </label>
+        <Checkbox v-model="endUserPolicy" binary inputId="endUserPolicy" @change="onTermsChange" />
+        <label for="endUserPolicy">
+          Acepto
+          <a :href="endUserPolicyStore.permalink" target="_blank" class="link">
+            Politica de usuario final
+          </a>
+        </label>
       </div>
-      <ErrorMessage class="error-message" name="secondTerms" />
+      <ErrorMessage class="error-message" name="endUserPolicy" />
     </div>
   </div>
   <div class="py-6">

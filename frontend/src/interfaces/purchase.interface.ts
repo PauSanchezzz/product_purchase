@@ -4,8 +4,8 @@ export interface Product {
   quantity: number
 }
 export interface terms {
-  term1: boolean
-  term2: boolean
+  personalDataAuth: boolean
+  endUserPolicy: boolean
 }
 export interface Shipping {
   name: string

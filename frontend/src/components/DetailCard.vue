@@ -22,7 +22,7 @@ const product = computed(() => store.getters['products/selectedProduct'])
 const isLoading = computed(() => store.getters['products/isLoading'])
 const totalPrice = computed(() => (product.value ? product.value.price * quantity.value : 0))
 
-const goToPayment = () => {
+const goToPayment = async () => {
   if (quantity.value === 0) {
     toast.add({
       severity: 'error',
@@ -32,7 +32,21 @@ const goToPayment = () => {
     })
     return
   }
-  router.push('/checkout')
+
+  try {
+    await store.dispatch('order/createOrder', {
+      productId: product.value.id,
+      quantity: quantity.value,
+    })
+    router.push('/checkout')
+  } catch (error) {
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'No se pudo crear la orden. Intenta nuevamente.',
+      life: 3000,
+    })
+  }
 }
 
 const changeQuantity = () => {

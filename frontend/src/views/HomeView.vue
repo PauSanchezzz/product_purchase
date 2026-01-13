@@ -1,21 +1,41 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useStore } from 'vuex'
 import Card from '@/components/Card.vue'
 import DetailCard from '@/components/DetailCard.vue'
+import type { Product } from '@/interfaces/products.interface'
+import Loading from '@/components/Loading.vue'
 
 const store = useStore()
 const viewDetailCard = ref(false)
 
-onMounted(() => {
+const productsList = computed(() => store.getters['products/productsList'])
+const isLoading = computed(() => store.getters['products/isLoading'])
+
+const handleViewDetail = async (product: Product) => {
+  viewDetailCard.value = true
+  await store.dispatch('products/fetchProductById', product.id)
+}
+
+onMounted(async () => {
   store.dispatch('clearStore')
+  await store.dispatch('products/fetchProducts')
 })
 </script>
 
 <template>
   <div class="full-page">
-    <div class="cards-container">
-      <Card v-for="value in 10" @viewDetailCard="viewDetailCard = true" />
+    <div v-if="isLoading && !viewDetailCard" class="flexflex-column justify-center p-8">
+      <Loading />
+      <p class="text-m--bold text-center">Cargando productos...</p>
+    </div>
+    <div v-else class="cards-container">
+      <Card
+        v-for="product in productsList"
+        :key="product.id"
+        :product="product"
+        @viewDetailCard="handleViewDetail"
+      />
     </div>
     <DetailCard v-if="viewDetailCard" @closeModal="viewDetailCard = false" />
   </div>

@@ -66,6 +66,9 @@ const onSubmit = handleSubmit(async (values, $event: any) => {
         {{ error }}
       </p>
     </div>
+    <p class="text-s--gray">
+      Por tu seguridad, tu información no será almacenada ni conservada en ningún momento.
+    </p>
     <NbCreditCard
       :flip-on-hover="false"
       :form-shadow="false"

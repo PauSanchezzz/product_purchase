@@ -11,18 +11,46 @@ import { computed } from 'vue'
 import { useStore } from 'vuex'
 
 const store = useStore()
-const purchase = computed(() => store.state.purchase)
+const purchase = computed(() => store.state.order)
+
+const orderResponse = computed(() => store.getters['order/orderResponse'])
+const orderId = computed(() => orderResponse.value?.id)
+const personalDataAuthStore = computed(() => store.state.purchase.terms.personalDataAuth)
+const endUserPolicyStore = computed(() => store.state.purchase.terms.endUserPolicy)
+const step = computed(() => store.state.purchase.step)
+
+const approveTerms = () => {
+  const prefirmedToken = {
+    personalDataAuth: {
+      acceptance_token: personalDataAuthStore.value.acceptance_token,
+    },
+    endUserPolicy: {
+      acceptance_token: endUserPolicyStore.value.acceptance_token,
+    },
+  }
+  store.dispatch('order/updatePrefirmedToken', {
+    orderId: orderId.value,
+    payload: prefirmedToken,
+  })
+}
 </script>
 
 <template>
   <div class="full-page max-md:flex-col md:px-[3rem] md:pt-[120px] pb-6">
     <div class="w-full max-md:pr-[1rem] max-md:order-2">
       <div class="card">
-        <Stepper value="1" linear>
+        <Stepper :value="String(step)" linear>
           <StepItem value="1">
             <Step>Terminos y condiciones</Step>
             <StepPanel v-slot="{ activateCallback }">
-              <ApproveTerms @nextStep="activateCallback('2')" />
+              <ApproveTerms
+                @nextStep="
+                  () => {
+                    approveTerms()
+                    activateCallback('2')
+                  }
+                "
+              />
             </StepPanel>
           </StepItem>
           <StepItem value="2">
