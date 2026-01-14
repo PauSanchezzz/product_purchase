@@ -11,7 +11,7 @@ export interface ProductsState {
   error: string | null
 }
 
-const PRODUCTS_URL = `${import.meta.env.VITE_BASE_URL || '/api'}/products`
+const PRODUCTS_URL = `${import.meta.env.VITE_BASE_URL_PROD  || '/api'}/products`
 
 const productsModule = {
   namespaced: true,

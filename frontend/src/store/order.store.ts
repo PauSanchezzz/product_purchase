@@ -12,7 +12,7 @@ export interface OrderState {
   error: string | null
 }
 
-const ORDER_URL = `${import.meta.env.VITE_BASE_URL || '/api'}/orders`
+const ORDER_URL = `${import.meta.env.VITE_BASE_URL_PROD || '/api'}/orders`
 const ORDER_STORAGE_KEY = 'order_store'
 
 // Load initial state from localStorage
