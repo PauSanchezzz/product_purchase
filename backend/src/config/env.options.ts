@@ -8,4 +8,5 @@ export const envOptions = {
     get DB_USERNAME() { return process.env.DB_USERNAME; },
     get DB_PASSWORD() { return process.env.DB_PASSWORD; },
     get DB_DATABASE() { return process.env.DB_DATABASE; },
+    get DB_SSL() { return process.env.DB_SSL; },
 }

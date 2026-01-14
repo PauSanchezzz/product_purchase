@@ -18,6 +18,12 @@ export const typeOrmConfig: DataSourceOptions = {
   ],
   synchronize: false,
   logging: false,
+  ssl: envOptions.DB_SSL === 'true',
+  extra: {
+    ssl: envOptions.DB_SSL === 'true' ? {
+      rejectUnauthorized: false,
+    } : null,
+  },
 };
 
 const appDataSource = new DataSource(typeOrmConfig);
