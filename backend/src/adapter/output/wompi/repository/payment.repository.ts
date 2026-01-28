@@ -29,7 +29,6 @@ export class PaymentWompiRepository implements IPaymentRepository {
       exp_year: card.expirationYear,
       card_holder: card.holderName,
     });
-    console.log('tokenizedCard', tokenizedCard);
     const amountInCents = order.total! * 100;
     const signature = `${this.projectKey}-${order.id}${amountInCents}COP${envOptions.WOMPI_INTEGRATION_KEY}`;
     const encryptedSignature = crypto
@@ -55,7 +54,6 @@ export class PaymentWompiRepository implements IPaymentRepository {
       shipping_address: {
         address_line_1: order.shippingInformation?.address!,
         city: order.shippingInformation?.city!,
-        /* country: order.shippingInformation?.country!, */
         country: 'CO',
         phone_number: order.shippingInformation?.phone!,
         postal_code: order.shippingInformation?.postalCode!,

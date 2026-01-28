@@ -58,7 +58,7 @@ export class CompleteOrderUseCase {
       if(order.status === OrderStatus.COMPLETED){
         await this.productsRepository.updateProductStock(
           order.productId,
-          order.quantity,
+          product.stock - order.quantity,
         );
       }
 

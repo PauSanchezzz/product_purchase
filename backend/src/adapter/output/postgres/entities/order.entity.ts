@@ -9,9 +9,10 @@ import {
 import { ProductEntity } from './product.entity';
 import { ShippingEntity } from './shipping.entity';
 import { OrderStatus } from '../../../../../domain/order/model/order-status.enum';
+import { OrderModel } from '../../../../../domain/order/model/order.model';
 
 @Entity('orders')
-export class OrderEntity {
+export class OrderEntity implements OrderModel {
   @PrimaryColumn('uuid')
   id: string;
 
@@ -20,7 +21,7 @@ export class OrderEntity {
 
   @Column()
   quantity: number;
-
+  
   @Column()
   shippingCost: number;
 
