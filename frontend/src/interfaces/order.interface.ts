@@ -10,6 +10,7 @@ export interface CreateOrderResponse {
   shippingCost: number
   subtotal: number
   total: number
+  iva: number
   createdAt: string
   prefirmedToken: PrefirmedToken
 }

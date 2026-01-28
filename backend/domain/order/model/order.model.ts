@@ -10,6 +10,7 @@ export class OrderModel {
         public readonly shippingCost: number,
         public readonly subtotal: number,
         public readonly total: number,
+        public readonly iva?: number,
         public readonly createdAt?: Date,
         public  status: OrderStatus = OrderStatus.PENDING,
         public  externalPaymentId?: string,

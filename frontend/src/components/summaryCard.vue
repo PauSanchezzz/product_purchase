@@ -47,10 +47,14 @@ onMounted(() => {
         <p class="text-m--bold">Envío</p>
         <p class="text-m--semibold">{{ formatPrice(orderResponse.shippingCost) }}</p>
       </div>
+      <div>
+        <p class="text-m--bold">IVA</p>
+        <p class="text-m--semibold">{{ formatPrice(orderResponse.iva) }}</p>
+      </div>
       <hr />
       <div>
         <p class="text-m--bold">Total</p>
-        <p class="text-m--semibold">{{ formatPrice(totalPrice + orderResponse.shippingCost) }}</p>
+        <p class="text-m--semibold">{{ formatPrice(orderResponse.total) }}</p>
       </div>
     </div>
   </div>

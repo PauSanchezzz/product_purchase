@@ -11,6 +11,7 @@ export abstract class CreateOrderMapper {
             shippingCost: order.shippingCost,
             subtotal: order.subtotal,
             total: order.total,
+            iva: order.iva || 0,
             createdAt: order.createdAt || new Date(),
             status: order.status,
             shippingInformation: order.shippingInformation,

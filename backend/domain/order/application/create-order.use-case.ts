@@ -25,7 +25,8 @@ export class CreateOrderUseCase {
 
         const shippingCost = Math.floor(Math.random() * (12000 - 3000 + 1)) + 3000;
         const subtotal = product.price * quantity;
-        const total = subtotal + shippingCost;
+        const iva = subtotal * 0.19;
+        const total = subtotal + shippingCost + iva;
         const id = uuidv4();
 
         const order = new OrderModel(
@@ -35,6 +36,7 @@ export class CreateOrderUseCase {
             shippingCost,
             subtotal,
             total,
+            iva,
             undefined, // createdAt
             undefined, // status (default)
             undefined, // externalPaymentId
@@ -42,7 +44,6 @@ export class CreateOrderUseCase {
             personalDataAuthToken,
             endUserPolicyToken
         );
-
 
         return await this.orderRepository.createOrder(order);
     }

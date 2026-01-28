@@ -21,6 +21,7 @@ export class OrderPostgresRepository implements IOrderRepository {
                 shippingCost: order.shippingCost,
                 subtotal: order.subtotal,
                 total: order.total,
+                iva: order.iva,
                 status: order.status,
                 externalPaymentId: order.externalPaymentId,
             });
@@ -57,6 +58,7 @@ export class OrderPostgresRepository implements IOrderRepository {
             order.shippingCost,
             order.subtotal,
             order.total,
+            order.iva,
             order.createdAt,
             order.status,
             order.externalPaymentId,

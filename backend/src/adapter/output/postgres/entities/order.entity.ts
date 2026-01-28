@@ -28,6 +28,9 @@ export class OrderEntity implements OrderModel {
   @Column()
   subtotal: number;
 
+  @Column({ nullable: true })
+  iva: number;
+
   @Column()
   total: number;
 

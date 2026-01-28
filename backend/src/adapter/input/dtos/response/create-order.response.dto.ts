@@ -7,6 +7,7 @@ export class CreateOrderResponseDto {
     shippingCost: number;
     subtotal: number;
     total: number;
+    iva: number;
     createdAt: Date;
     status: string;
     shippingInformation?: any;
